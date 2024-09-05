@@ -1,0 +1,31 @@
+variant: fcos
+version: 1.0.0
+storage:
+disks:
+    - device:	"/dev/sdc"
+      wipeTable: true
+      partitions: 
+      	- label: root
+      	  number: 1
+      	  typeGuid: 4F68BCE3-E8CD-4DB1-96E7-FBCAF984B709
+  filesystems:
+    - path: /var/lib/containers
+      device: "/dev/sdc1"
+      format: btrfs
+      wipe_filesystem: false
+  files:
+    - path: /etc/hostname
+      mode: 0644
+      overwrite: true
+      contents:
+        inline: "suma5"
+passwd:
+  users:
+   - name: root
+     password_hash: "$6$.SQP1boa4ruC2WOd$8Z3onJbWDR.QO6O558aGYzh91HmpOp.KGWFjjlB5REAeyF1kKtLuAo/Lzi.SRKieEBMXwtN3rmyDxJp0.u7lx1"
+     ssh_authorized_keys: 
+       - ssh-rsa long...key user@host
+systemd:
+  units:
+  - name: sshd.service
+    enabled: true

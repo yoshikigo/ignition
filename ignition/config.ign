@@ -1,0 +1,36 @@
+{
+  "ignition": {
+    "version": "3.0.0"
+  },
+  "passwd": {
+    "users": [
+      {
+        "name": "root",
+        "passwordHash": "$6$.SQP1boa4ruC2WOd$8Z3onJbWDR.QO6O558aGYzh91HmpOp.KGWFjjlB5REAeyF1kKtLuAo/Lzi.SRKieEBMXwtN3rmyDxJp0.u7lx1",
+        "sshAuthorizedKeys": [
+          "ssh-rsa long...key user@host"
+        ]
+      }
+    ]
+  },
+  "storage": {
+    "files": [
+      {
+        "overwrite": true,
+        "path": "/etc/hostname",
+        "contents": {
+          "source": "data:,suma5"
+        },
+        "mode": 420
+      }
+    ]
+  },
+  "systemd": {
+    "units": [
+      {
+        "enabled": true,
+        "name": "sshd.service"
+      }
+    ]
+  }
+}

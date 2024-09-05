@@ -1,0 +1,47 @@
+ #!/bin/bash
+# combustion: network 
+
+mkdir -pm700 /root/.ssh/
+cat id_rsa_new.pub >> /root/.ssh/authorized_keys
+systemctl enable --now sshd.service
+
+zypper --non-interactive install vim-small lvm 
+
+
+# combustion: network prepare
+set -euxo pipefail
+
+nm_config() {
+umask 077 # Required for NM config
+mkdir -p /etc/NetworkManager/system-connections/
+cat >/etc/NetworkManager/system-connections/static.nmconnection <<-EOF
+[connection]
+id=static
+type=ethernet
+autoconnect=true
+
+[ipv4]
+method=manual
+dns=8.8.8.8
+address1=192.168.61.42/24,192.168.61.2
+EOF
+}
+
+if [ "${1-}" = "--prepare" ]; then
+nm_config # Configure NM in the initrd
+exit 0
+fi
+
+# Redirect output to the console
+exec > >(exec tee -a /dev/tty0) 2>&1
+
+nm_config # Configure NM in the system
+
+
+
+# Close outputs and wait for tee to finish
+exec 1>&- 2>&-; wait;
+
+# Leave a marker
+echo "Configured with combustion" > /etc/issue.d/combustion
+
